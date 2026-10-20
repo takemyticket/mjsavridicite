@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as CommentAdhererRouteImport } from './routes/comment-adherer'
 import { Route as ConditionsRouteImport } from './routes/conditions'
 import { Route as ConnexionRouteImport } from './routes/connexion'
@@ -18,10 +19,16 @@ import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oubl
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VerifierRouteImport } from './routes/verifier'
+import { Route as AuthenticatedEspaceIndexRouteImport } from './routes/_authenticated/espace.index'
+import { Route as AuthenticatedEspaceDemandeIndexRouteImport } from './routes/_authenticated/espace.demande.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommentAdhererRoute = CommentAdhererRouteImport.update({
@@ -64,6 +71,18 @@ const VerifierRoute = VerifierRouteImport.update({
   path: '/verifier',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedEspaceIndexRoute =
+  AuthenticatedEspaceIndexRouteImport.update({
+    id: '/espace/',
+    path: '/espace/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEspaceDemandeIndexRoute =
+  AuthenticatedEspaceDemandeIndexRouteImport.update({
+    id: '/espace/demande/',
+    path: '/espace/demande/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +94,8 @@ export interface FileRoutesByFullPath {
   '/presentation': typeof PresentationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
+  '/espace/': typeof AuthenticatedEspaceIndexRoute
+  '/espace/demande/': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,10 +107,13 @@ export interface FileRoutesByTo {
   '/presentation': typeof PresentationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
+  '/espace': typeof AuthenticatedEspaceIndexRoute
+  '/espace/demande': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/comment-adherer': typeof CommentAdhererRoute
   '/conditions': typeof ConditionsRoute
   '/connexion': typeof ConnexionRoute
@@ -98,6 +122,8 @@ export interface FileRoutesById {
   '/presentation': typeof PresentationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
+  '/_authenticated/espace/': typeof AuthenticatedEspaceIndexRoute
+  '/_authenticated/espace/demande/': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +137,8 @@ export interface FileRouteTypes {
     | '/presentation'
     | '/reset-password'
     | '/verifier'
+    | '/espace/'
+    | '/espace/demande/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,9 +150,12 @@ export interface FileRouteTypes {
     | '/presentation'
     | '/reset-password'
     | '/verifier'
+    | '/espace'
+    | '/espace/demande'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/comment-adherer'
     | '/conditions'
     | '/connexion'
@@ -133,10 +164,13 @@ export interface FileRouteTypes {
     | '/presentation'
     | '/reset-password'
     | '/verifier'
+    | '/_authenticated/espace/'
+    | '/_authenticated/espace/demande/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   CommentAdhererRoute: typeof CommentAdhererRoute
   ConditionsRoute: typeof ConditionsRoute
   ConnexionRoute: typeof ConnexionRoute
@@ -154,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comment-adherer': {
@@ -212,11 +253,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifierRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/espace/': {
+      id: '/_authenticated/espace/'
+      path: '/espace'
+      fullPath: '/espace/'
+      preLoaderRoute: typeof AuthenticatedEspaceIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/espace/demande/': {
+      id: '/_authenticated/espace/demande/'
+      path: '/espace/demande'
+      fullPath: '/espace/demande/'
+      preLoaderRoute: typeof AuthenticatedEspaceDemandeIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEspaceIndexRoute: typeof AuthenticatedEspaceIndexRoute
+  AuthenticatedEspaceDemandeIndexRoute: typeof AuthenticatedEspaceDemandeIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEspaceIndexRoute: AuthenticatedEspaceIndexRoute,
+  AuthenticatedEspaceDemandeIndexRoute: AuthenticatedEspaceDemandeIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   CommentAdhererRoute: CommentAdhererRoute,
   ConditionsRoute: ConditionsRoute,
   ConnexionRoute: ConnexionRoute,

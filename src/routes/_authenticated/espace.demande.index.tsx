@@ -115,7 +115,7 @@ function Page() {
   );
 }
 
-export function Steps({ step }: { step: number }) {
+function Steps({ step }: { step: number }) {
   const labels = ["Dossier", "Soumission", "Paiement", "Validation"];
   return (
     <ol className="mb-6 flex gap-2 text-xs">
