@@ -50,6 +50,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
               <>
+                {staff && <Button asChild variant="gold"><Link to="/gestion">Administration</Link></Button>}
                 <Button asChild variant="ghost"><Link to="/espace">Mon espace</Link></Button>
                 <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/" }); }}>Déconnexion</Button>
               </>
@@ -72,6 +73,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               ))}
               {user ? (
                 <>
+                  {staff && <Button asChild variant="gold"><Link to="/gestion">Administration</Link></Button>}
                   <Button asChild><Link to="/espace">Mon espace</Link></Button>
                   <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/" }); }}>Déconnexion</Button>
                 </>
