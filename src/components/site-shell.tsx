@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Menu, X, Cross } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/use-session";
@@ -30,6 +30,11 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const { user } = useSession();
   const navigate = useNavigate();
+  const [staff, setStaff] = useState(false);
+  useEffect(() => {
+    if (!user) { setStaff(false); return; }
+    supabase.from("user_roles").select("role").eq("user_id", user.id).then(({ data }) => setStaff((data ?? []).length > 0));
+  }, [user]);
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
