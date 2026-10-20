@@ -28,7 +28,7 @@ function Page() {
         <form className="space-y-4" onSubmit={async (e) => {
           e.preventDefault();
           const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + "/reset-password" });
-          if (error) return toast.error(error.message);
+          if (error) { toast.error(error.message); return; }
           setSent(true);
         }}>
           <div className="space-y-1.5"><Label htmlFor="email">Adresse e-mail</Label><Input id="email" type="email" required className="h-11" value={email} onChange={(e) => setEmail(e.target.value)} /></div>

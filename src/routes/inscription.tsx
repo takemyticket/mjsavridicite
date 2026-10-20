@@ -43,7 +43,7 @@ function Page() {
         onSubmit={async (e) => {
           e.preventDefault();
           const p = schema.safeParse(form);
-          if (!p.success) return toast.error(p.error.issues[0].message);
+          if (!p.success) { toast.error(p.error.issues[0]?.message ?? "Formulaire invalide."); return; }
           setLoading(true);
           const { error } = await supabase.auth.signUp({
             email: p.data.email,
@@ -51,7 +51,7 @@ function Page() {
             options: { emailRedirectTo: window.location.origin + "/espace", data: { nom_complet: p.data.nom } },
           });
           setLoading(false);
-          if (error) return toast.error(error.message);
+          if (error) { toast.error(error.message); return; }
           setSent(true);
         }}
       >

@@ -59,7 +59,7 @@ function Dossiers() {
   });
   const act = async (fn: () => PromiseLike<{ error: { message: string } | null }>, ok: string) => {
     const { error } = await fn();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(ok);
     qc.invalidateQueries({ queryKey: ["gestion"] });
   };
@@ -147,9 +147,9 @@ function CampagneRow({ c, onSaved }: { c: Campagne; onSaved: () => void }) {
         </div>
         <Button onClick={async () => {
           const n = montant === "" ? null : Number(montant);
-          if (n != null && (!Number.isInteger(n) || n < 0)) return toast.error("Montant invalide.");
+          if (n != null && (!Number.isInteger(n) || n < 0)) { toast.error("Montant invalide."); return; }
           const { error } = await supabase.from("campagnes").update({ montant_xof: n, statut }).eq("id", c.id);
-          if (error) return toast.error(error.message);
+          if (error) { toast.error(error.message); return; }
           toast.success("Campagne mise à jour."); onSaved();
         }}>Enregistrer</Button>
       </div>

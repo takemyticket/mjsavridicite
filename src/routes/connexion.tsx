@@ -33,7 +33,7 @@ function Page() {
           setLoading(true);
           const { error } = await supabase.auth.signInWithPassword({ email, password });
           setLoading(false);
-          if (error) return toast.error(error.message.includes("confirm") ? "Confirmez d'abord votre adresse e-mail." : "E-mail ou mot de passe incorrect.");
+          if (error) { toast.error(error.message.includes("confirm") ? "Confirmez d'abord votre adresse e-mail." : "E-mail ou mot de passe incorrect."); return; }
           navigate({ to: "/espace" });
         }}
       >

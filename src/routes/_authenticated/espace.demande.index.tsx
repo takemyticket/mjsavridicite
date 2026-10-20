@@ -94,7 +94,7 @@ function Page() {
       <form className="mt-8" onSubmit={async (e) => {
         e.preventDefault();
         const p = membreSchema.safeParse(values);
-        if (!p.success) return toast.error(p.error.issues[0].message);
+        if (!p.success) { toast.error(p.error.issues[0]?.message ?? "Formulaire invalide."); return; }
         setSaving(true);
         try {
           const { data: m, error } = await supabase.from("membres").insert({ ...toRow(values), user_id: user.id }).select("id").single();

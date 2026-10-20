@@ -65,8 +65,8 @@ function Page() {
 
   async function saveMembre() {
     const p = membreSchema.safeParse(values);
-    if (!p.success) throw new Error(p.error.issues[0].message);
-    const patch: Record<string, unknown> = toRow(values!);
+    if (!p.success) throw new Error(p.error.issues[0]?.message ?? "Formulaire invalide.");
+    const patch: ReturnType<typeof toRow> & { photo_path?: string } = toRow(values!);
     if (photo) patch.photo_path = await uploadPhoto(user.id, m.id, photo);
     const { error } = await supabase.from("membres").update(patch).eq("id", m.id);
     if (error) throw error;
@@ -146,7 +146,7 @@ function Page() {
               </div>
               <Button disabled={busy} onClick={() => {
                 const r = refSchema.safeParse(ref);
-                if (!r.success) return toast.error(r.error.issues[0].message);
+                if (!r.success) { toast.error(r.error.issues[0]?.message ?? "Invalide."); return; }
                 run(async () => {
                   const { error } = await supabase.from("paiements").insert({ demande_id: d.id, user_id: user.id, moyen, reference: r.data, montant_xof: d.montant_xof! });
                   if (error) throw new Error(error.message);

@@ -26,9 +26,9 @@ function Page() {
     <AuthCard title="Nouveau mot de passe">
       <form className="space-y-4" onSubmit={async (e) => {
         e.preventDefault();
-        if (pw.length < 8) return toast.error("Au moins 8 caractères.");
+        if (pw.length < 8) { toast.error("Au moins 8 caractères."); return; }
         const { error } = await supabase.auth.updateUser({ password: pw });
-        if (error) return toast.error("Lien expiré ou invalide. Recommencez la demande.");
+        if (error) { toast.error("Lien expiré ou invalide. Recommencez la demande."); return; }
         toast.success("Mot de passe mis à jour.");
         navigate({ to: "/espace" });
       }}>
