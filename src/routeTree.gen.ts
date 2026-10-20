@@ -10,33 +10,200 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as CommentAdhererRouteImport } from './routes/comment-adherer'
+import { Route as ConditionsRouteImport } from './routes/conditions'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
+import { Route as PresentationRouteImport } from './routes/presentation'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as VerifierRouteImport } from './routes/verifier'
+import { Route as AuthenticatedGestionRouteImport } from './routes/_authenticated/gestion'
+import { Route as AuthenticatedEspaceIndexRouteImport } from './routes/_authenticated/espace.index'
+import { Route as AuthenticatedEspaceDemandeIndexRouteImport } from './routes/_authenticated/espace.demande.index'
+import { Route as AuthenticatedEspaceDemandeIdRouteImport } from './routes/_authenticated/espace.demande.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommentAdhererRoute = CommentAdhererRouteImport.update({
+  id: '/comment-adherer',
+  path: '/comment-adherer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConditionsRoute = ConditionsRouteImport.update({
+  id: '/conditions',
+  path: '/conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InscriptionRoute = InscriptionRouteImport.update({
+  id: '/inscription',
+  path: '/inscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
+  id: '/mot-de-passe-oublie',
+  path: '/mot-de-passe-oublie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresentationRoute = PresentationRouteImport.update({
+  id: '/presentation',
+  path: '/presentation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifierRoute = VerifierRouteImport.update({
+  id: '/verifier',
+  path: '/verifier',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedGestionRoute = AuthenticatedGestionRouteImport.update({
+  id: '/gestion',
+  path: '/gestion',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEspaceIndexRoute =
+  AuthenticatedEspaceIndexRouteImport.update({
+    id: '/espace/',
+    path: '/espace/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEspaceDemandeIndexRoute =
+  AuthenticatedEspaceDemandeIndexRouteImport.update({
+    id: '/espace/demande/',
+    path: '/espace/demande/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEspaceDemandeIdRoute =
+  AuthenticatedEspaceDemandeIdRouteImport.update({
+    id: '/espace/demande/$id',
+    path: '/espace/demande/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comment-adherer': typeof CommentAdhererRoute
+  '/conditions': typeof ConditionsRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/presentation': typeof PresentationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verifier': typeof VerifierRoute
+  '/gestion': typeof AuthenticatedGestionRoute
+  '/espace/': typeof AuthenticatedEspaceIndexRoute
+  '/espace/demande/$id': typeof AuthenticatedEspaceDemandeIdRoute
+  '/espace/demande/': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comment-adherer': typeof CommentAdhererRoute
+  '/conditions': typeof ConditionsRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/presentation': typeof PresentationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verifier': typeof VerifierRoute
+  '/gestion': typeof AuthenticatedGestionRoute
+  '/espace': typeof AuthenticatedEspaceIndexRoute
+  '/espace/demande/$id': typeof AuthenticatedEspaceDemandeIdRoute
+  '/espace/demande': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/comment-adherer': typeof CommentAdhererRoute
+  '/conditions': typeof ConditionsRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
+  '/presentation': typeof PresentationRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verifier': typeof VerifierRoute
+  '/_authenticated/gestion': typeof AuthenticatedGestionRoute
+  '/_authenticated/espace/': typeof AuthenticatedEspaceIndexRoute
+  '/_authenticated/espace/demande/$id': typeof AuthenticatedEspaceDemandeIdRoute
+  '/_authenticated/espace/demande/': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/comment-adherer'
+    | '/conditions'
+    | '/connexion'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
+    | '/presentation'
+    | '/reset-password'
+    | '/verifier'
+    | '/gestion'
+    | '/espace/'
+    | '/espace/demande/$id'
+    | '/espace/demande/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/comment-adherer'
+    | '/conditions'
+    | '/connexion'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
+    | '/presentation'
+    | '/reset-password'
+    | '/verifier'
+    | '/gestion'
+    | '/espace'
+    | '/espace/demande/$id'
+    | '/espace/demande'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/comment-adherer'
+    | '/conditions'
+    | '/connexion'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
+    | '/presentation'
+    | '/reset-password'
+    | '/verifier'
+    | '/_authenticated/gestion'
+    | '/_authenticated/espace/'
+    | '/_authenticated/espace/demande/$id'
+    | '/_authenticated/espace/demande/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  CommentAdhererRoute: typeof CommentAdhererRoute
+  ConditionsRoute: typeof ConditionsRoute
+  ConnexionRoute: typeof ConnexionRoute
+  InscriptionRoute: typeof InscriptionRoute
+  MotDePasseOublieRoute: typeof MotDePasseOublieRoute
+  PresentationRoute: typeof PresentationRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifierRoute: typeof VerifierRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +215,128 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comment-adherer': {
+      id: '/comment-adherer'
+      path: '/comment-adherer'
+      fullPath: '/comment-adherer'
+      preLoaderRoute: typeof CommentAdhererRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conditions': {
+      id: '/conditions'
+      path: '/conditions'
+      fullPath: '/conditions'
+      preLoaderRoute: typeof ConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inscription': {
+      id: '/inscription'
+      path: '/inscription'
+      fullPath: '/inscription'
+      preLoaderRoute: typeof InscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mot-de-passe-oublie': {
+      id: '/mot-de-passe-oublie'
+      path: '/mot-de-passe-oublie'
+      fullPath: '/mot-de-passe-oublie'
+      preLoaderRoute: typeof MotDePasseOublieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presentation': {
+      id: '/presentation'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verifier': {
+      id: '/verifier'
+      path: '/verifier'
+      fullPath: '/verifier'
+      preLoaderRoute: typeof VerifierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/gestion': {
+      id: '/_authenticated/gestion'
+      path: '/gestion'
+      fullPath: '/gestion'
+      preLoaderRoute: typeof AuthenticatedGestionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/espace/': {
+      id: '/_authenticated/espace/'
+      path: '/espace'
+      fullPath: '/espace/'
+      preLoaderRoute: typeof AuthenticatedEspaceIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/espace/demande/': {
+      id: '/_authenticated/espace/demande/'
+      path: '/espace/demande'
+      fullPath: '/espace/demande/'
+      preLoaderRoute: typeof AuthenticatedEspaceDemandeIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/espace/demande/$id': {
+      id: '/_authenticated/espace/demande/$id'
+      path: '/espace/demande/$id'
+      fullPath: '/espace/demande/$id'
+      preLoaderRoute: typeof AuthenticatedEspaceDemandeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedGestionRoute: typeof AuthenticatedGestionRoute
+  AuthenticatedEspaceIndexRoute: typeof AuthenticatedEspaceIndexRoute
+  AuthenticatedEspaceDemandeIdRoute: typeof AuthenticatedEspaceDemandeIdRoute
+  AuthenticatedEspaceDemandeIndexRoute: typeof AuthenticatedEspaceDemandeIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedGestionRoute: AuthenticatedGestionRoute,
+  AuthenticatedEspaceIndexRoute: AuthenticatedEspaceIndexRoute,
+  AuthenticatedEspaceDemandeIdRoute: AuthenticatedEspaceDemandeIdRoute,
+  AuthenticatedEspaceDemandeIndexRoute: AuthenticatedEspaceDemandeIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  CommentAdhererRoute: CommentAdhererRoute,
+  ConditionsRoute: ConditionsRoute,
+  ConnexionRoute: ConnexionRoute,
+  InscriptionRoute: InscriptionRoute,
+  MotDePasseOublieRoute: MotDePasseOublieRoute,
+  PresentationRoute: PresentationRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  VerifierRoute: VerifierRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
