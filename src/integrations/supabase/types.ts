@@ -21,6 +21,7 @@ export type Database = {
           date_fermeture: string
           date_ouverture: string
           id: string
+          montant_readhesion_xof: number | null
           montant_xof: number | null
           nom: string
           statut: Database["public"]["Enums"]["campagne_statut"]
@@ -32,6 +33,7 @@ export type Database = {
           date_fermeture: string
           date_ouverture: string
           id?: string
+          montant_readhesion_xof?: number | null
           montant_xof?: number | null
           nom: string
           statut?: Database["public"]["Enums"]["campagne_statut"]
@@ -43,6 +45,7 @@ export type Database = {
           date_fermeture?: string
           date_ouverture?: string
           id?: string
+          montant_readhesion_xof?: number | null
           montant_xof?: number | null
           nom?: string
           statut?: Database["public"]["Enums"]["campagne_statut"]
