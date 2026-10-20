@@ -19,8 +19,10 @@ import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oubl
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VerifierRouteImport } from './routes/verifier'
+import { Route as AuthenticatedGestionRouteImport } from './routes/_authenticated/gestion'
 import { Route as AuthenticatedEspaceIndexRouteImport } from './routes/_authenticated/espace.index'
 import { Route as AuthenticatedEspaceDemandeIndexRouteImport } from './routes/_authenticated/espace.demande.index'
+import { Route as AuthenticatedEspaceDemandeIdRouteImport } from './routes/_authenticated/espace.demande.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -71,6 +73,11 @@ const VerifierRoute = VerifierRouteImport.update({
   path: '/verifier',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedGestionRoute = AuthenticatedGestionRouteImport.update({
+  id: '/gestion',
+  path: '/gestion',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEspaceIndexRoute =
   AuthenticatedEspaceIndexRouteImport.update({
     id: '/espace/',
@@ -81,6 +88,12 @@ const AuthenticatedEspaceDemandeIndexRoute =
   AuthenticatedEspaceDemandeIndexRouteImport.update({
     id: '/espace/demande/',
     path: '/espace/demande/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEspaceDemandeIdRoute =
+  AuthenticatedEspaceDemandeIdRouteImport.update({
+    id: '/espace/demande/$id',
+    path: '/espace/demande/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -94,7 +107,9 @@ export interface FileRoutesByFullPath {
   '/presentation': typeof PresentationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
+  '/gestion': typeof AuthenticatedGestionRoute
   '/espace/': typeof AuthenticatedEspaceIndexRoute
+  '/espace/demande/$id': typeof AuthenticatedEspaceDemandeIdRoute
   '/espace/demande/': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -107,7 +122,9 @@ export interface FileRoutesByTo {
   '/presentation': typeof PresentationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
+  '/gestion': typeof AuthenticatedGestionRoute
   '/espace': typeof AuthenticatedEspaceIndexRoute
+  '/espace/demande/$id': typeof AuthenticatedEspaceDemandeIdRoute
   '/espace/demande': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRoutesById {
@@ -122,7 +139,9 @@ export interface FileRoutesById {
   '/presentation': typeof PresentationRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
+  '/_authenticated/gestion': typeof AuthenticatedGestionRoute
   '/_authenticated/espace/': typeof AuthenticatedEspaceIndexRoute
+  '/_authenticated/espace/demande/$id': typeof AuthenticatedEspaceDemandeIdRoute
   '/_authenticated/espace/demande/': typeof AuthenticatedEspaceDemandeIndexRoute
 }
 export interface FileRouteTypes {
@@ -137,7 +156,9 @@ export interface FileRouteTypes {
     | '/presentation'
     | '/reset-password'
     | '/verifier'
+    | '/gestion'
     | '/espace/'
+    | '/espace/demande/$id'
     | '/espace/demande/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,7 +171,9 @@ export interface FileRouteTypes {
     | '/presentation'
     | '/reset-password'
     | '/verifier'
+    | '/gestion'
     | '/espace'
+    | '/espace/demande/$id'
     | '/espace/demande'
   id:
     | '__root__'
@@ -164,7 +187,9 @@ export interface FileRouteTypes {
     | '/presentation'
     | '/reset-password'
     | '/verifier'
+    | '/_authenticated/gestion'
     | '/_authenticated/espace/'
+    | '/_authenticated/espace/demande/$id'
     | '/_authenticated/espace/demande/'
   fileRoutesById: FileRoutesById
 }
@@ -253,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifierRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/gestion': {
+      id: '/_authenticated/gestion'
+      path: '/gestion'
+      fullPath: '/gestion'
+      preLoaderRoute: typeof AuthenticatedGestionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/espace/': {
       id: '/_authenticated/espace/'
       path: '/espace'
@@ -267,16 +299,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEspaceDemandeIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/espace/demande/$id': {
+      id: '/_authenticated/espace/demande/$id'
+      path: '/espace/demande/$id'
+      fullPath: '/espace/demande/$id'
+      preLoaderRoute: typeof AuthenticatedEspaceDemandeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedGestionRoute: typeof AuthenticatedGestionRoute
   AuthenticatedEspaceIndexRoute: typeof AuthenticatedEspaceIndexRoute
+  AuthenticatedEspaceDemandeIdRoute: typeof AuthenticatedEspaceDemandeIdRoute
   AuthenticatedEspaceDemandeIndexRoute: typeof AuthenticatedEspaceDemandeIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedGestionRoute: AuthenticatedGestionRoute,
   AuthenticatedEspaceIndexRoute: AuthenticatedEspaceIndexRoute,
+  AuthenticatedEspaceDemandeIdRoute: AuthenticatedEspaceDemandeIdRoute,
   AuthenticatedEspaceDemandeIndexRoute: AuthenticatedEspaceDemandeIndexRoute,
 }
 
