@@ -10,33 +10,80 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CommentAdhererRouteImport } from './routes/comment-adherer'
+import { Route as ConditionsRouteImport } from './routes/conditions'
+import { Route as PresentationRouteImport } from './routes/presentation'
+import { Route as VerifierRouteImport } from './routes/verifier'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommentAdhererRoute = CommentAdhererRouteImport.update({
+  id: '/comment-adherer',
+  path: '/comment-adherer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConditionsRoute = ConditionsRouteImport.update({
+  id: '/conditions',
+  path: '/conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresentationRoute = PresentationRouteImport.update({
+  id: '/presentation',
+  path: '/presentation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifierRoute = VerifierRouteImport.update({
+  id: '/verifier',
+  path: '/verifier',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comment-adherer': typeof CommentAdhererRoute
+  '/conditions': typeof ConditionsRoute
+  '/presentation': typeof PresentationRoute
+  '/verifier': typeof VerifierRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comment-adherer': typeof CommentAdhererRoute
+  '/conditions': typeof ConditionsRoute
+  '/presentation': typeof PresentationRoute
+  '/verifier': typeof VerifierRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/comment-adherer': typeof CommentAdhererRoute
+  '/conditions': typeof ConditionsRoute
+  '/presentation': typeof PresentationRoute
+  '/verifier': typeof VerifierRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/comment-adherer' | '/conditions' | '/presentation' | '/verifier'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/comment-adherer' | '/conditions' | '/presentation' | '/verifier'
+  id:
+    | '__root__'
+    | '/'
+    | '/comment-adherer'
+    | '/conditions'
+    | '/presentation'
+    | '/verifier'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CommentAdhererRoute: typeof CommentAdhererRoute
+  ConditionsRoute: typeof ConditionsRoute
+  PresentationRoute: typeof PresentationRoute
+  VerifierRoute: typeof VerifierRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +95,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comment-adherer': {
+      id: '/comment-adherer'
+      path: '/comment-adherer'
+      fullPath: '/comment-adherer'
+      preLoaderRoute: typeof CommentAdhererRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conditions': {
+      id: '/conditions'
+      path: '/conditions'
+      fullPath: '/conditions'
+      preLoaderRoute: typeof ConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presentation': {
+      id: '/presentation'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verifier': {
+      id: '/verifier'
+      path: '/verifier'
+      fullPath: '/verifier'
+      preLoaderRoute: typeof VerifierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CommentAdhererRoute: CommentAdhererRoute,
+  ConditionsRoute: ConditionsRoute,
+  PresentationRoute: PresentationRoute,
+  VerifierRoute: VerifierRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
