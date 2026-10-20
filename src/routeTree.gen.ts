@@ -12,7 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CommentAdhererRouteImport } from './routes/comment-adherer'
 import { Route as ConditionsRouteImport } from './routes/conditions'
+import { Route as ConnexionRouteImport } from './routes/connexion'
+import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
 import { Route as PresentationRouteImport } from './routes/presentation'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VerifierRouteImport } from './routes/verifier'
 
 const IndexRoute = IndexRouteImport.update({
@@ -30,9 +34,29 @@ const ConditionsRoute = ConditionsRouteImport.update({
   path: '/conditions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InscriptionRoute = InscriptionRouteImport.update({
+  id: '/inscription',
+  path: '/inscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
+  id: '/mot-de-passe-oublie',
+  path: '/mot-de-passe-oublie',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PresentationRoute = PresentationRouteImport.update({
   id: '/presentation',
   path: '/presentation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VerifierRoute = VerifierRouteImport.update({
@@ -45,14 +69,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/comment-adherer': typeof CommentAdhererRoute
   '/conditions': typeof ConditionsRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/presentation': typeof PresentationRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/comment-adherer': typeof CommentAdhererRoute
   '/conditions': typeof ConditionsRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/presentation': typeof PresentationRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
 }
 export interface FileRoutesById {
@@ -60,21 +92,46 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/comment-adherer': typeof CommentAdhererRoute
   '/conditions': typeof ConditionsRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/presentation': typeof PresentationRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/verifier': typeof VerifierRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/comment-adherer' | '/conditions' | '/presentation' | '/verifier'
+    | '/'
+    | '/comment-adherer'
+    | '/conditions'
+    | '/connexion'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
+    | '/presentation'
+    | '/reset-password'
+    | '/verifier'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/comment-adherer' | '/conditions' | '/presentation' | '/verifier'
+  to:
+    | '/'
+    | '/comment-adherer'
+    | '/conditions'
+    | '/connexion'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
+    | '/presentation'
+    | '/reset-password'
+    | '/verifier'
   id:
     | '__root__'
     | '/'
     | '/comment-adherer'
     | '/conditions'
+    | '/connexion'
+    | '/inscription'
+    | '/mot-de-passe-oublie'
     | '/presentation'
+    | '/reset-password'
     | '/verifier'
   fileRoutesById: FileRoutesById
 }
@@ -82,7 +139,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CommentAdhererRoute: typeof CommentAdhererRoute
   ConditionsRoute: typeof ConditionsRoute
+  ConnexionRoute: typeof ConnexionRoute
+  InscriptionRoute: typeof InscriptionRoute
+  MotDePasseOublieRoute: typeof MotDePasseOublieRoute
   PresentationRoute: typeof PresentationRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   VerifierRoute: typeof VerifierRoute
 }
 
@@ -109,11 +170,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConditionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inscription': {
+      id: '/inscription'
+      path: '/inscription'
+      fullPath: '/inscription'
+      preLoaderRoute: typeof InscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mot-de-passe-oublie': {
+      id: '/mot-de-passe-oublie'
+      path: '/mot-de-passe-oublie'
+      fullPath: '/mot-de-passe-oublie'
+      preLoaderRoute: typeof MotDePasseOublieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/presentation': {
       id: '/presentation'
       path: '/presentation'
       fullPath: '/presentation'
       preLoaderRoute: typeof PresentationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verifier': {
@@ -130,7 +219,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CommentAdhererRoute: CommentAdhererRoute,
   ConditionsRoute: ConditionsRoute,
+  ConnexionRoute: ConnexionRoute,
+  InscriptionRoute: InscriptionRoute,
+  MotDePasseOublieRoute: MotDePasseOublieRoute,
   PresentationRoute: PresentationRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   VerifierRoute: VerifierRoute,
 }
 export const routeTree = rootRouteImport

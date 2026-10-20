@@ -23,7 +23,7 @@ export function GoogleButton() {
       variant="outline"
       className="w-full h-11"
       onClick={async () => {
-        const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/espace" });
+        const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
         if (r.error) toast.error("Connexion Google impossible.");
         else if (!r.redirected) window.location.href = "/espace";
       }}
