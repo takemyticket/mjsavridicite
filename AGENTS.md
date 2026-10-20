@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Business rules (status transitions, amount snapshot at submission, payment confirmation) are enforced by database triggers on demandes/paiements; UI only mirrors them — never move them client-side.
