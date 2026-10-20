@@ -133,13 +133,15 @@ function Campagnes() {
 
 function CampagneRow({ c, onSaved }: { c: Campagne; onSaved: () => void }) {
   const [montant, setMontant] = useState(c.montant_xof?.toString() ?? "");
+  const [montantRe, setMontantRe] = useState(c.montant_readhesion_xof?.toString() ?? "");
   const [statut, setStatut] = useState(c.statut);
   return (
     <div className="rounded-xl border bg-card p-4">
       <p className="font-semibold">{c.nom}</p>
       <p className="text-sm text-muted-foreground">Du {formatDate(c.date_ouverture)} au {formatDate(c.date_fermeture)} · cartes valables jusqu'au {formatDate(c.validite_carte_fin)}</p>
-      <div className="mt-3 grid gap-3 sm:grid-cols-3 sm:items-end">
-        <div className="space-y-1.5"><Label>Cotisation (FCFA)</Label><Input type="number" min={0} value={montant} onChange={(e) => setMontant(e.target.value)} /></div>
+      <div className="mt-3 grid gap-3 sm:grid-cols-4 sm:items-end">
+        <div className="space-y-1.5"><Label>Adhésion (FCFA)</Label><Input type="number" min={0} value={montant} onChange={(e) => setMontant(e.target.value)} /></div>
+        <div className="space-y-1.5"><Label>Réadhésion (FCFA)</Label><Input type="number" min={0} value={montantRe} onChange={(e) => setMontantRe(e.target.value)} /></div>
         <div className="space-y-1.5"><Label>Statut</Label>
           <select className="h-9 w-full rounded-md border border-input bg-background px-3" value={statut} onChange={(e) => setStatut(e.target.value as typeof statut)}>
             <option value="preparation">En préparation</option><option value="ouverte">Ouverte</option><option value="fermee">Fermée</option>
@@ -147,8 +149,9 @@ function CampagneRow({ c, onSaved }: { c: Campagne; onSaved: () => void }) {
         </div>
         <Button onClick={async () => {
           const n = montant === "" ? null : Number(montant);
-          if (n != null && (!Number.isInteger(n) || n < 0)) { toast.error("Montant invalide."); return; }
-          const { error } = await supabase.from("campagnes").update({ montant_xof: n, statut }).eq("id", c.id);
+          const nr = montantRe === "" ? null : Number(montantRe);
+          if ([n, nr].some((x) => x != null && (!Number.isInteger(x) || x < 0))) { toast.error("Montant invalide."); return; }
+          const { error } = await supabase.from("campagnes").update({ montant_xof: n, montant_readhesion_xof: nr, statut }).eq("id", c.id);
           if (error) { toast.error(error.message); return; }
           toast.success("Campagne mise à jour."); onSaved();
         }}>Enregistrer</Button>

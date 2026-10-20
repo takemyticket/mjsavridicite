@@ -63,7 +63,7 @@ function Page() {
           <>
             <p className="text-sm text-gold">Campagne en cours</p>
             <h2 className="text-2xl font-semibold">{camp.nom}</h2>
-            <p className="mt-1 opacity-90">Cotisation : {formatXOF(camp.montant_xof)} · jusqu'au {formatDate(camp.date_fermeture)}</p>
+            <p className="mt-1 opacity-90">Adhésion : {formatXOF(camp.montant_xof)} · Réadhésion : {formatXOF(camp.montant_readhesion_xof)} · jusqu'au {formatDate(camp.date_fermeture)}</p>
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="gold"><Link to="/espace/demande" search={{ type: "adhesion" }}><UserPlus /> Première adhésion</Link></Button>
               <Button asChild variant="onDark"><Link to="/espace/demande" search={{ type: "readhesion" }}><RefreshCw /> Réadhésion</Link></Button>

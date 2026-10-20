@@ -115,7 +115,7 @@ function Page() {
                 if (confirm("Annuler cette demande ?")) run(async () => { const { error } = await supabase.from("demandes").update({ statut: "annule" }).eq("id", d.id); if (error) throw error; }, "Demande annulée.");
               }}>Annuler</Button>
             </div>
-            {d.campagnes?.montant_xof == null && <p className="mt-3 text-sm text-muted-foreground">Le montant de la cotisation n'est pas encore fixé : la soumission sera possible dès qu'il le sera.</p>}
+            {(d.type === "readhesion" ? d.campagnes?.montant_readhesion_xof : d.campagnes?.montant_xof) == null && <p className="mt-3 text-sm text-muted-foreground">Le montant de la cotisation n'est pas encore fixé : la soumission sera possible dès qu'il le sera.</p>}
           </>
         )}
       </section>

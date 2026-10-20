@@ -59,7 +59,7 @@ function Page() {
       <div className="mx-auto max-w-3xl px-4 py-10">
         <Steps step={1} />
         <h1 className="text-3xl font-semibold">Réadhésion — {camp.nom}</h1>
-        <p className="mt-2 text-muted-foreground">Choisissez le servant à réinscrire. Cotisation : {formatXOF(camp.montant_xof)}.</p>
+        <p className="mt-2 text-muted-foreground">Choisissez le servant à réinscrire. Cotisation : {formatXOF(camp.montant_readhesion_xof)}.</p>
         {membres.length === 0 ? (
           <div className="mt-6 rounded-xl border border-dashed p-6">
             <p>Aucun servant n'est enregistré sur ce compte.</p>
