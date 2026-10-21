@@ -17,6 +17,15 @@ import type { Database } from "@/integrations/supabase/types";
 
 type Statut = Database["public"]["Enums"]["dossier_statut"];
 
+async function fetchDossiers(filtre: Statut | "tous") {
+  let r = supabase.from("demandes").select("*, membres(*), campagnes(*), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
+  if (filtre !== "tous") r = r.eq("statut", filtre);
+  const { data, error } = await r;
+  if (error) throw error;
+  return data;
+}
+type Dossier = Awaited<ReturnType<typeof fetchDossiers>>[number];
+
 export const Route = createFileRoute("/_authenticated/gestion")({
   head: () => ({
     meta: [
