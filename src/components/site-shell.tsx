@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X, Cross } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logoParoisse from "@/assets/logo-paroisse.png.asset.json";
+import logoDiocese from "@/assets/logo-diocese.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/lib/use-session";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,12 +14,9 @@ const links = [
 ] as const;
 
 export function Logo() {
-  // Emplacement du logo officiel (à fournir par la paroisse)
   return (
     <Link to="/" className="flex items-center gap-2">
-      <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-gold">
-        <Cross className="h-4 w-4" />
-      </span>
+      <img src={logoParoisse.url} alt="Logo de la paroisse Saint Jean-Marie Vianney" className="h-11 w-11 rounded-full object-contain" />
       <span className="leading-tight">
         <span className="block font-display text-base font-semibold">Servants</span>
         <span className="block text-[11px] text-muted-foreground">St Jean-Marie Vianney</span>
@@ -89,8 +88,13 @@ export function SiteShell({ children }: { children: ReactNode }) {
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t bg-secondary">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-muted-foreground md:flex-row md:justify-between">
-          <p>Enfants de Chœur — Paroisse Saint Jean-Marie Vianney, Vridi-Cité, Abidjan</p>
+        <div className="h-1 w-full bg-diocese" />
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            <img src={logoParoisse.url} alt="Logo paroissial" className="h-12 w-12 object-contain" />
+            <img src={logoDiocese.url} alt="Logo du diocèse de Grand-Bassam" className="h-12 w-12 object-contain" />
+            <p>Enfants de Chœur — Paroisse Saint Jean-Marie Vianney, Vridi-Cité · Diocèse de Grand-Bassam</p>
+          </div>
           <Link to="/conditions" className="hover:text-foreground">Conditions d'utilisation & confidentialité</Link>
         </div>
       </footer>
