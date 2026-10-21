@@ -173,7 +173,10 @@ function Dossiers() {
                     <p className="text-sm text-muted-foreground">{d.type === "adhesion" ? "Adhésion" : "Réadhésion"} · {d.campagnes?.nom} · {formatXOF(d.montant_xof)} · soumis le {formatDate(d.soumis_le)}</p>
                     {m.tuteur_nom && <p className="text-sm">Représentant : {m.tuteur_nom} ({m.tuteur_contact})</p>}
                   </div>
-                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${statutTone[d.statut]}`}>{statutLabel[d.statut]}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${statutTone[d.statut]}`}>{statutLabel[d.statut]}</span>
+                    <Button size="sm" variant="outline" onClick={() => setCarte(d)}><IdCard className="h-4 w-4" />Voir la carte</Button>
+                  </div>
                 </div>
                 {d.paiements.map((p) => (
                   <div key={p.id} className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted p-3 text-sm">
