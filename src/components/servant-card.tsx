@@ -17,17 +17,17 @@ const hymne = [
   "Pour qu’enfin règne sur le monde", "la justice et la charité.",
 ];
 
-export function ServantCard({ demande, membre, campagne }: { demande: Demande; membre: Membre; campagne: Campagne | null }) {
-  if (!peutVoirCarte(demande.statut)) return (
+export function ServantCard({ demande, membre, campagne, staff = false }: { demande: Demande; membre: Membre; campagne: Campagne | null; staff?: boolean }) {
+  if (!peutVoirCarte(demande.statut) && !staff) return (
     <section className="flex items-start gap-3 border-y py-5" aria-label="Carte indisponible">
       <LockKeyhole className="mt-1 h-5 w-5 shrink-0 text-muted-foreground" />
       <div><h2 className="text-xl font-semibold">Carte de servant</h2><p className="mt-1 text-sm text-muted-foreground">Disponible après la validation finale du responsable.</p></div>
     </section>
   );
-  return <CarteValidee demande={demande} membre={membre} campagne={campagne} />;
+  return <CarteValidee demande={demande} membre={membre} campagne={campagne} staff={staff} />;
 }
 
-function CarteValidee({ demande, membre, campagne }: { demande: Demande; membre: Membre; campagne: Campagne | null }) {
+function CarteValidee({ demande, membre, campagne, staff = false }: { demande: Demande; membre: Membre; campagne: Campagne | null; staff?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const [photo, setPhoto] = useState<string | null>(null);
