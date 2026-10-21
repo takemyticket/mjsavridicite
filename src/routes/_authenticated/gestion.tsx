@@ -129,7 +129,7 @@ function Bilan() {
 function Dossiers() {
   const qc = useQueryClient();
   const [filtre, setFiltre] = useState<Statut | "tous">("soumis");
-  const [carte, setCarte] = useState<(typeof q extends never ? never : any) | null>(null);
+  const [carte, setCarte] = useState<Dossier | null>(null);
   const q = useQuery({
     queryKey: ["gestion", filtre],
     queryFn: async () => {
