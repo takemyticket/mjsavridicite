@@ -4,6 +4,7 @@ import { UserPlus, RefreshCw, IdCard, Bell, Settings2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { peutVoirCarte } from "@/lib/carte";
 import { campagneOuverte, isStaff } from "@/lib/data";
 import { formatDate, formatXOF, paiementLabel, statutLabel, statutTone } from "@/lib/labels";
 
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/_authenticated/espace/")({
       { name: "description", content: "Vos demandes, paiements et cartes." },
       { property: "og:title", content: "Mon espace membre" },
       { property: "og:description", content: "Tableau de bord du membre." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,
@@ -23,6 +26,7 @@ function Page() {
   const { user } = Route.useRouteContext();
   const q = useQuery({
     queryKey: ["espace", user.id],
+    refetchInterval: 15000,
     queryFn: async () => {
       const [camp, roles, profil, demandes] = await Promise.all([
         campagneOuverte(),
@@ -38,7 +42,7 @@ function Page() {
   if (q.isLoading) return <div className="mx-auto max-w-5xl space-y-4 px-4 py-10"><Skeleton className="h-10 w-64" /><Skeleton className="h-40" /></div>;
   if (q.error || !q.data) return <p className="p-10 text-destructive">Impossible de charger votre espace. Réessayez.</p>;
   const { camp, roles, profil, demandes } = q.data;
-  const actives = demandes.filter((d) => d.campagne_id === camp?.id);
+  const cartes = demandes.filter((d) => peutVoirCarte(d.statut));
   const aCorriger = demandes.filter((d) => d.statut === "a_corriger");
 
   return (
@@ -102,8 +106,8 @@ function Page() {
       <section className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border bg-card p-5">
           <IdCard className="h-5 w-5 text-gold" />
-          <h3 className="mt-2 text-lg font-semibold">Carte active</h3>
-          <p className="text-sm text-muted-foreground">{actives.some((d) => d.statut === "valide") ? "Dossier validé — la carte sera disponible prochainement." : "Aucune carte active pour la campagne en cours."}</p>
+          <h3 className="mt-2 text-lg font-semibold">Mes cartes de servant</h3>
+          {cartes.length ? <ul className="mt-3 space-y-2">{cartes.map((d) => <li key={d.id}><Button asChild variant="outline" className="h-auto w-full justify-start whitespace-normal text-left"><Link to="/espace/demande/$id" params={{ id: d.id }}><IdCard className="shrink-0" /><span>{d.membres?.prenoms} {d.membres?.nom} · {d.campagnes?.annee}</span></Link></Button></li>)}</ul> : <p className="text-sm text-muted-foreground">Les cartes seront disponibles après validation finale des dossiers.</p>}
         </div>
         <div className="rounded-xl border bg-card p-5">
           <h3 className="text-lg font-semibold">Reçus</h3>

@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Business rules (status transitions, amount snapshot at submission, payment confirmation) are enforced by database triggers on demandes/paiements; UI only mirrors them — never move them client-side.
+- Render the membership card from the authenticated request's existing member/campaign data and reuse that document for client-side PDF export; this avoids duplicate or publicly exposed identity records.

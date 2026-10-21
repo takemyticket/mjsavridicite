@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MembreForm, fromMembre, membreSchema, toRow, type MembreValues } from "@/components/membre-form";
 import { Steps } from "@/components/steps";
+import { ServantCard } from "@/components/servant-card";
 import { uploadPhoto } from "@/lib/data";
 import { formatDate, formatXOF, moyenLabel, paiementLabel, statutLabel, statutTone } from "@/lib/labels";
 
@@ -22,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/espace/demande/$id")({
       { name: "description", content: "Suivi d'une demande d'adhésion." },
       { property: "og:title", content: "Suivi de demande" },
       { property: "og:description", content: "Statut, paiement et historique de la demande." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,
@@ -36,6 +39,7 @@ function Page() {
   const key = ["demande", id];
   const q = useQuery({
     queryKey: key,
+    refetchInterval: 15000,
     queryFn: async () => {
       const { data, error } = await supabase.from("demandes").select("*, membres(*), campagnes(*), paiements(*), historique_statuts(*)").eq("id", id).single();
       if (error) throw error;
@@ -55,10 +59,11 @@ function Page() {
     if (q.data) { setCertif(q.data.certifie_exact); setConsent(q.data.consentement); }
   }, [q.data]);
 
-  if (q.isLoading || !values) return <div className="mx-auto max-w-3xl px-4 py-10"><Skeleton className="h-96" /></div>;
   if (q.error || !q.data) return <p className="p-10 text-destructive">Demande introuvable.</p>;
+  if (q.isLoading || !values) return <div className="mx-auto max-w-3xl px-4 py-10"><Skeleton className="h-96" /></div>;
   const d = q.data;
-  const m = d.membres!;
+  const m = d.membres;
+  if (!m) return <p className="p-10 text-destructive">Servant introuvable.</p>;
   const editable = d.statut === "brouillon" || d.statut === "a_corriger";
   const paiementActif = d.paiements.find((p) => p.statut !== "rejete");
   const step = d.statut === "valide" ? 4 : paiementActif ? 3 : d.statut === "brouillon" || d.statut === "a_corriger" ? 1 : 2;
@@ -66,7 +71,8 @@ function Page() {
   async function saveMembre() {
     const p = membreSchema.safeParse(values);
     if (!p.success) throw new Error(p.error.issues[0]?.message ?? "Formulaire invalide.");
-    const patch: ReturnType<typeof toRow> & { photo_path?: string } = toRow(values!);
+    if (!values) throw new Error("Formulaire indisponible.");
+    const patch: ReturnType<typeof toRow> & { photo_path?: string } = toRow(values);
     if (photo) patch.photo_path = await uploadPhoto(user.id, m.id, photo);
     const { error } = await supabase.from("membres").update(patch).eq("id", m.id);
     if (error) throw error;
@@ -95,6 +101,8 @@ function Page() {
         <div className="rounded-xl border border-warning/40 bg-warning/10 p-4"><p className="font-semibold">Correction demandée</p><p>{d.motif}</p></div>
       )}
       {d.statut === "refuse" && d.motif && <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-4">Motif : {d.motif}</div>}
+
+      <ServantCard demande={d} membre={m} campagne={d.campagnes} />
 
       <section className="rounded-2xl border bg-card p-5 md:p-6">
         <MembreForm value={values} onChange={setValues} disabled={!editable} photoPath={m.photo_path} onPhoto={setPhoto} />
@@ -148,7 +156,8 @@ function Page() {
                 const r = refSchema.safeParse(ref);
                 if (!r.success) { toast.error(r.error.issues[0]?.message ?? "Invalide."); return; }
                 run(async () => {
-                  const { error } = await supabase.from("paiements").insert({ demande_id: d.id, user_id: user.id, moyen, reference: r.data, montant_xof: d.montant_xof! });
+                  if (d.montant_xof == null) throw new Error("Montant indisponible.");
+                  const { error } = await supabase.from("paiements").insert({ demande_id: d.id, user_id: user.id, moyen, reference: r.data, montant_xof: d.montant_xof });
                   if (error) throw new Error(error.message);
                   setRef("");
                 }, "Paiement déclaré. En attente de confirmation.");
