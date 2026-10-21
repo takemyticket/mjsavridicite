@@ -21,6 +21,8 @@ export const Route = createFileRoute("/_authenticated/gestion")({
       { name: "description", content: "Espace des responsables." },
       { property: "og:title", content: "Gestion des adhésions" },
       { property: "og:description", content: "Vérification des dossiers et des paiements." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/connexion")({
       { name: "description", content: "Connectez-vous à votre espace membre." },
       { property: "og:title", content: "Connexion à l'espace membre" },
       { property: "og:description", content: "Suivez vos demandes d'adhésion et vos paiements." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

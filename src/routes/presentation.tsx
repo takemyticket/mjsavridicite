@@ -8,6 +8,8 @@ export const Route = createFileRoute("/presentation")({
       { name: "description", content: "À quoi sert la plateforme d'adhésion des Enfants de Chœur de Vridi-Cité." },
       { property: "og:title", content: "La plateforme des Servants" },
       { property: "og:description", content: "Adhésions, cotisations et cartes de servant d'autel, en ligne." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (
