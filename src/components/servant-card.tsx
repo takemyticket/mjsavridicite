@@ -67,6 +67,9 @@ function CarteValidee({ demande, membre, campagne, staff = false }: { demande: D
         <div className="flex items-center gap-2"><IdCard className="h-6 w-6 text-primary" /><h2 className="text-2xl font-semibold">Carte de servant</h2></div>
         <Button variant="gold" disabled={busy} onClick={telecharger}><Download className="h-4 w-4" />{busy ? "Préparation…" : "Télécharger le PDF"}</Button>
       </div>
+      {staff && demande.statut !== "valide" && (
+        <p className="rounded-lg border border-gold/40 bg-accent/40 px-3 py-2 text-sm">Aperçu réservé aux responsables — la carte sera visible par la famille seulement après la validation finale.</p>
+      )}
       <div className="border bg-muted p-2 sm:p-4" aria-label="Aperçu de la carte">
         <div ref={previewRef} className="servant-card-preview">
         <div ref={ref} className="servant-card">
