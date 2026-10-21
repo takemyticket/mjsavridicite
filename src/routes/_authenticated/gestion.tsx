@@ -35,11 +35,88 @@ function Page() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="mb-6 text-3xl font-semibold">Gestion</h1>
-      <Tabs defaultValue="demandes">
-        <TabsList><TabsTrigger value="demandes">Dossiers</TabsTrigger>{admin && <TabsTrigger value="campagne">Campagnes & tarif</TabsTrigger>}</TabsList>
+      <Tabs defaultValue="bilan">
+        <TabsList><TabsTrigger value="bilan">Tableau de bord</TabsTrigger><TabsTrigger value="demandes">Dossiers</TabsTrigger>{admin && <TabsTrigger value="campagne">Campagnes & tarif</TabsTrigger>}</TabsList>
+        <TabsContent value="bilan"><Bilan /></TabsContent>
         <TabsContent value="demandes"><Dossiers /></TabsContent>
         {admin && <TabsContent value="campagne"><Campagnes /></TabsContent>}
       </Tabs>
+    </div>
+  );
+}
+
+function Bilan() {
+  const q = useQuery({
+    queryKey: ["bilan"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("demandes").select("*, membres(*), campagnes(nom), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+  if (q.isLoading) return <Skeleton className="mt-4 h-40" />;
+  const rows = q.data ?? [];
+  const nouveaux = rows.filter((d) => d.type === "adhesion");
+  const anciens = rows.filter((d) => d.type === "readhesion");
+  const paye = (d: (typeof rows)[number]) => d.paiements.some((p) => p.statut === "confirme");
+  const encaisse = rows.filter(paye).reduce((s, d) => s + (d.montant_xof ?? 0), 0);
+  const stats = [
+    { t: "Nouveaux (adhésions)", v: nouveaux.length },
+    { t: "Anciens (réadhésions)", v: anciens.length },
+    { t: "Dossiers validés", v: rows.filter((d) => d.statut === "valide").length },
+    { t: "En attente", v: rows.filter((d) => ["soumis", "en_verification", "a_corriger"].includes(d.statut)).length },
+    { t: "Paiements confirmés", v: rows.filter(paye).length },
+    { t: "Total encaissé", v: formatXOF(encaisse) },
+  ];
+  const exporter = async () => {
+    const XLSX = await import("xlsx");
+    const toSheet = (list: typeof rows) => XLSX.utils.json_to_sheet(list.map((d) => {
+      const m = d.membres!;
+      const p = d.paiements.find((x) => x.statut !== "rejete");
+      return {
+        Nom: m.nom, Prénoms: m.prenoms, "Date de naissance": formatDate(m.date_naissance), Sexe: m.sexe ?? "",
+        Téléphone: m.telephone ?? "", Email: m.email ?? "", Représentant: m.tuteur_nom ?? "", "Contact représentant": m.tuteur_contact ?? "",
+        Campagne: d.campagnes?.nom ?? "", Statut: statutLabel[d.statut], "Montant (FCFA)": d.montant_xof ?? "",
+        Paiement: p ? `${moyenLabel[p.moyen]} – ${paiementLabel[p.statut]}` : "Aucun", "Référence paiement": p?.reference ?? "",
+        "Soumis le": formatDate(d.soumis_le),
+      };
+    }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, toSheet(nouveaux), "Nouveaux");
+    XLSX.utils.book_append_sheet(wb, toSheet(anciens), "Anciens");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(stats.map((s) => ({ Indicateur: s.t, Valeur: s.v }))), "Bilan");
+    XLSX.writeFile(wb, `bilan-servants-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
+  const Liste = ({ titre, list }: { titre: string; list: typeof rows }) => (
+    <div className="rounded-xl border bg-card p-4">
+      <h3 className="mb-3 text-lg font-semibold">{titre} ({list.length})</h3>
+      {!list.length ? <p className="text-sm text-muted-foreground">Aucun.</p> : (
+        <ul className="divide-y text-sm">
+          {list.map((d) => (
+            <li key={d.id} className="flex flex-wrap justify-between gap-2 py-2">
+              <span>{d.membres!.prenoms} {d.membres!.nom}</span>
+              <span className={`rounded-full px-2 py-0.5 text-xs ${statutTone[d.statut]}`}>{statutLabel[d.statut]}{paye(d) ? " · payé" : ""}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+  return (
+    <div className="mt-4 space-y-6">
+      <div className="grid gap-3 sm:grid-cols-3">
+        {stats.map((s) => (
+          <div key={s.t} className="rounded-xl border bg-card p-4 shadow-soft">
+            <p className="text-sm text-muted-foreground">{s.t}</p>
+            <p className="mt-1 font-display text-2xl font-semibold">{s.v}</p>
+          </div>
+        ))}
+      </div>
+      <Button variant="gold" onClick={exporter}>Télécharger le bilan Excel</Button>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Liste titre="Nouveaux" list={nouveaux} />
+        <Liste titre="Anciens" list={anciens} />
+      </div>
     </div>
   );
 }
