@@ -129,10 +129,11 @@ function Bilan() {
 function Dossiers() {
   const qc = useQueryClient();
   const [filtre, setFiltre] = useState<Statut | "tous">("soumis");
+  const [carte, setCarte] = useState<(typeof q extends never ? never : any) | null>(null);
   const q = useQuery({
     queryKey: ["gestion", filtre],
     queryFn: async () => {
-      let r = supabase.from("demandes").select("*, membres(*), campagnes(nom), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
+      let r = supabase.from("demandes").select("*, membres(*), campagnes(*), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
       if (filtre !== "tous") r = r.eq("statut", filtre);
       const { data, error } = await r;
       if (error) throw error;
