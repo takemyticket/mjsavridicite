@@ -116,7 +116,8 @@
   --card-ink: #202c44;
   --card-rule: #728198;
 }
-.servant-card { width: 1000px; height: 572px; display: grid; grid-template-columns: 1fr 1fr; background: var(--card-paper); color: var(--card-ink); font-family: Georgia, serif; padding: 26px; gap: 30px; }
+.servant-card-preview { width: 100%; aspect-ratio: 1000 / 572; overflow: hidden; }
+.servant-card { width: 1000px; height: 572px; transform: scale(var(--card-preview-scale, 0.7)); transform-origin: top left; display: grid; grid-template-columns: 1fr 1fr; background: var(--card-paper); color: var(--card-ink); font-family: Georgia, serif; padding: 26px; gap: 30px; }
 .servant-card h3 { font-family: Georgia, serif; font-size: 20px; line-height: 1.25; text-align: center; text-transform: uppercase; text-decoration: underline; letter-spacing: 0; font-weight: 700; }
 .servant-card-hymn { padding: 4px 12px; display: flex; flex-direction: column; justify-content: space-between; }
 .servant-card-verses { text-align: center; font-style: italic; font-size: 19px; line-height: 1.48; }

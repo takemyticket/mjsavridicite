@@ -29,8 +29,18 @@ export function ServantCard({ demande, membre, campagne }: { demande: Demande; m
 
 function CarteValidee({ demande, membre, campagne }: { demande: Demande; membre: Membre; campagne: Campagne | null }) {
   const ref = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const [photo, setPhoto] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    const preview = previewRef.current;
+    if (!preview) return;
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) preview.style.setProperty("--card-preview-scale", String(entry.contentRect.width / 1000));
+    });
+    observer.observe(preview);
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     let active = true;
     photoUrl(membre.photo_path).then((url) => { if (active) setPhoto(url); }).catch(() => { if (active) setPhoto(null); });
@@ -44,7 +54,7 @@ function CarteValidee({ demande, membre, campagne }: { demande: Demande; membre:
     try {
       await document.fonts.ready;
       const [{ toPng }, { jsPDF }] = await Promise.all([import("html-to-image"), import("jspdf")]);
-      const image = await toPng(node, { pixelRatio: 2, cacheBust: true });
+      const image = await toPng(node, { pixelRatio: 2, cacheBust: true, style: { transform: "none" } });
       const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: [210, 120] });
       pdf.addImage(image, "PNG", 0, 0, 210, 120);
       pdf.save(`carte-servant-${membre.nom}-${campagne?.annee ?? ""}.pdf`);
@@ -57,7 +67,8 @@ function CarteValidee({ demande, membre, campagne }: { demande: Demande; membre:
         <div className="flex items-center gap-2"><IdCard className="h-6 w-6 text-primary" /><h2 className="text-2xl font-semibold">Carte de servant</h2></div>
         <Button variant="gold" disabled={busy} onClick={telecharger}><Download className="h-4 w-4" />{busy ? "Préparation…" : "Télécharger le PDF"}</Button>
       </div>
-      <div className="overflow-x-auto border bg-muted p-2 sm:p-4" tabIndex={0} aria-label="Aperçu de la carte">
+      <div className="border bg-muted p-2 sm:p-4" aria-label="Aperçu de la carte">
+        <div ref={previewRef} className="servant-card-preview">
         <div ref={ref} className="servant-card">
           <div className="servant-card-hymn">
             <h3>Hymne du mouvement des jeunes au service de l’autel</h3>
@@ -86,6 +97,7 @@ function CarteValidee({ demande, membre, campagne }: { demande: Demande; membre:
             <footer className="servant-card-footer"><span>{campagne?.nom}</span><span>{campagne?.validite_carte_fin ? `Valable jusqu’au ${formatDate(campagne.validite_carte_fin)}` : ""}</span></footer>
             <p className="servant-card-number">Dossier : {demande.id}</p>
           </div>
+        </div>
         </div>
       </div>
     </section>
