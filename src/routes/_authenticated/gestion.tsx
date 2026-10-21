@@ -141,13 +141,7 @@ function Dossiers() {
   const [carte, setCarte] = useState<Dossier | null>(null);
   const q = useQuery({
     queryKey: ["gestion", filtre],
-    queryFn: async () => {
-      let r = supabase.from("demandes").select("*, membres(*), campagnes(*), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
-      if (filtre !== "tous") r = r.eq("statut", filtre);
-      const { data, error } = await r;
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => fetchDossiers(filtre),
   });
   const act = async (fn: () => PromiseLike<{ error: { message: string } | null }>, ok: string) => {
     const { error } = await fn();
