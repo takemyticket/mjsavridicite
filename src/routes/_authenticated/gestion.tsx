@@ -204,6 +204,12 @@ function Dossiers() {
           })}
         </ul>
       )}
+      <Dialog open={!!carte} onOpenChange={(o) => { if (!o) setCarte(null); }}>
+        <DialogContent className="max-h-[90vh] max-w-[1080px] overflow-y-auto">
+          <DialogHeader><DialogTitle>Carte de servant — aperçu</DialogTitle></DialogHeader>
+          {carte?.membres && <ServantCard demande={carte} membre={carte.membres} campagne={carte.campagnes} staff />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
