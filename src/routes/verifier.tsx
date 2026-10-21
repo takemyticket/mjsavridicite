@@ -8,6 +8,8 @@ export const Route = createFileRoute("/verifier")({
       { name: "description", content: "Vérification de la validité d'une carte de servant d'autel." },
       { property: "og:title", content: "Vérifier une carte de servant" },
       { property: "og:description", content: "Scannez le QR code d'une carte pour vérifier sa validité." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (

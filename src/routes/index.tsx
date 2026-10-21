@@ -10,6 +10,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Adhérez ou réadhérez aux Enfants de Chœur de la paroisse Saint Jean-Marie Vianney de Vridi-Cité, en ligne." },
       { property: "og:title", content: "Servants Saint Jean-Marie Vianney" },
       { property: "og:description", content: "La plateforme des adhésions des Enfants de Chœur de Vridi-Cité." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,

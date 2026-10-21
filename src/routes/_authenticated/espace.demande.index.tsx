@@ -18,6 +18,8 @@ export const Route = createFileRoute("/_authenticated/espace/demande/")({
       { name: "description", content: "Déposer une demande d'adhésion ou de réadhésion." },
       { property: "og:title", content: "Nouvelle demande" },
       { property: "og:description", content: "Adhésion ou réadhésion aux Enfants de Chœur." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

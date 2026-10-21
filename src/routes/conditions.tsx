@@ -8,6 +8,8 @@ export const Route = createFileRoute("/conditions")({
       { name: "description", content: "Conditions d'utilisation et politique de confidentialité de la plateforme." },
       { property: "og:title", content: "Conditions d'utilisation et confidentialité" },
       { property: "og:description", content: "Comment vos données sont utilisées et protégées." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: () => (

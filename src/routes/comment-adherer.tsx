@@ -9,6 +9,8 @@ export const Route = createFileRoute("/comment-adherer")({
       { name: "description", content: "Les étapes pour adhérer ou réadhérer aux Enfants de Chœur de Vridi-Cité." },
       { property: "og:title", content: "Comment adhérer ou réadhérer" },
       { property: "og:description", content: "Créer un compte, remplir le dossier, payer la cotisation, recevoir sa carte." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

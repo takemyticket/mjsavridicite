@@ -15,6 +15,8 @@ export const Route = createFileRoute("/inscription")({
       { name: "description", content: "Créez votre compte pour adhérer aux Enfants de Chœur." },
       { property: "og:title", content: "Créer un compte" },
       { property: "og:description", content: "Première étape pour adhérer ou réadhérer." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,
