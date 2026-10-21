@@ -2,17 +2,29 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { IdCard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ServantCard } from "@/components/servant-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isStaff, type Campagne } from "@/lib/data";
 import { formatDate, formatXOF, moyenLabel, paiementLabel, statutLabel, statutTone } from "@/lib/labels";
 import type { Database } from "@/integrations/supabase/types";
 
 type Statut = Database["public"]["Enums"]["dossier_statut"];
+
+async function fetchDossiers(filtre: Statut | "tous") {
+  let r = supabase.from("demandes").select("*, membres(*), campagnes(*), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
+  if (filtre !== "tous") r = r.eq("statut", filtre);
+  const { data, error } = await r;
+  if (error) throw error;
+  return data;
+}
+type Dossier = Awaited<ReturnType<typeof fetchDossiers>>[number];
 
 export const Route = createFileRoute("/_authenticated/gestion")({
   head: () => ({
@@ -126,15 +138,10 @@ function Bilan() {
 function Dossiers() {
   const qc = useQueryClient();
   const [filtre, setFiltre] = useState<Statut | "tous">("soumis");
+  const [carte, setCarte] = useState<Dossier | null>(null);
   const q = useQuery({
     queryKey: ["gestion", filtre],
-    queryFn: async () => {
-      let r = supabase.from("demandes").select("*, membres(*), campagnes(nom), paiements(*)").neq("statut", "brouillon").order("soumis_le", { ascending: false });
-      if (filtre !== "tous") r = r.eq("statut", filtre);
-      const { data, error } = await r;
-      if (error) throw error;
-      return data;
-    },
+    queryFn: () => fetchDossiers(filtre),
   });
   const act = async (fn: () => PromiseLike<{ error: { message: string } | null }>, ok: string) => {
     const { error } = await fn();
@@ -166,7 +173,10 @@ function Dossiers() {
                     <p className="text-sm text-muted-foreground">{d.type === "adhesion" ? "Adhésion" : "Réadhésion"} · {d.campagnes?.nom} · {formatXOF(d.montant_xof)} · soumis le {formatDate(d.soumis_le)}</p>
                     {m.tuteur_nom && <p className="text-sm">Représentant : {m.tuteur_nom} ({m.tuteur_contact})</p>}
                   </div>
-                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${statutTone[d.statut]}`}>{statutLabel[d.statut]}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${statutTone[d.statut]}`}>{statutLabel[d.statut]}</span>
+                    <Button size="sm" variant="outline" onClick={() => setCarte(d)}><IdCard className="h-4 w-4" />Voir la carte</Button>
+                  </div>
                 </div>
                 {d.paiements.map((p) => (
                   <div key={p.id} className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted p-3 text-sm">
@@ -194,6 +204,12 @@ function Dossiers() {
           })}
         </ul>
       )}
+      <Dialog open={!!carte} onOpenChange={(o) => { if (!o) setCarte(null); }}>
+        <DialogContent className="max-h-[90vh] max-w-[1080px] overflow-y-auto">
+          <DialogHeader><DialogTitle>Carte de servant — aperçu</DialogTitle></DialogHeader>
+          {carte?.membres && <ServantCard demande={carte} membre={carte.membres} campagne={carte.campagnes} staff />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
